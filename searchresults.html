@@ -1,0 +1,15 @@
+<html>
+<head>
+<title>{{page_title}}</title>
+<link rel="stylesheet" type="text/css" href="/assets/style.css" />
+</head>
+<body>
+<h1>{{page_title}}</h1>
+<div>
+	{% for event in events_print %}
+	<h3>{{event}}</h3>
+	{% endfor %}
+</div>
+<br>
+</body>
+</html>

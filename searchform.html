@@ -1,0 +1,28 @@
+<html>
+<head>
+<title>{{page_title}}</title>
+<link rel="stylesheet" type="text/css" href="/assets/style.css" />
+<script>
+	function geoLocation(){
+		if (navigator.geolocation){
+			navigator.geolocation.getCurrentPosition(fillPosition);
+		} else {
+			alert("Geolocation is not supported by your browser.");}
+	}
+	function fillPosition(position){
+		var lat = document.getElementById("lat");
+		var lon = document.getElementById("lng");
+		lat.value = position.coords.latitude;
+		lon.value = position.coords.longitude;
+	}
+</script>
+</head>
+<body>
+<h1>Welcome! </h1>
+<form action="results" method="post">
+	<label for="date">Please enter your date of interest:</label>
+	<input type="text" id="date" name="date"/><br />
+	<br />
+	<input type="submit" value="Search" name"gobtn"/></form>
+</body>
+</html>
