@@ -40,7 +40,7 @@ def eventfulREST(baseurl = 'http://api.eventful.com/json/events/search',
     return safeurl
 
 # calls to the eventfulREST, recieves the JSON data and returns a list of events
-def get_eds(keywords="books", location="Seattle", date="Next Week", n=5):
+def get_eds(keywords=None, location=None, date=None, n=5):
     params = {'keywords': keywords, 'location': location, 'date': date, 'page_size': n}
 
     data_retrieved = eventfulREST(params=params)
@@ -91,12 +91,14 @@ class ResultsHandler(webapp2.RequestHandler):
     def post(self):
         vals = {}
         date = self.request.get('date')
+        location = self.request.get('location')
 
-        vals['page_title'] = "Events happening " + date
+        vals['page_title'] = "Events happening " + date + " around " + location + ":"
 
         if date:
             vals['date'] = date
-            events = [Event(ed) for ed in get_eds(date)]
+            vals['location'] = location
+            events = [Event(ed) for ed in get_eds(location=location, date=date)]
             events_print = [event.__str__() for event in events]
             vals['events_print'] = events_print
 
@@ -113,18 +115,29 @@ application = webapp2.WSGIApplication([ \
 ],
     debug=True)
 
-print("NO parameters:")
-edl_no_params = get_eds()
-print(len(edl_no_params))
-eventlist_noparams = [Event(ed) for ed in edl_no_params]
-for event in eventlist_noparams[:3]:
-    print(event)
-
-print("WITH parameters:")
-edl_params = get_eds(keywords="movies", location="San Francisco", date="Future", n=10)
+# print("NO parameters:")
+# edl_no_params = get_eds()
+# print(len(edl_no_params))
+# eventlist_noparams = [Event(ed) for ed in edl_no_params]
+# for event in eventlist_noparams[:3]:
+#     print(event)
+#
+print("With keywords parameter:")
+edl_params = get_eds(keywords='coffee', location='Portland')
 print(len(edl_params))
 eventlist_params = [Event(ed) for ed in edl_params]
 for event in eventlist_params[:3]:
     print(event)
 
+# print("With DATE parameter:")
+# edl_params = get_eds(date='All')
+# print(len(edl_params))
+# eventlist_params = [Event(ed) for ed in edl_params]
+# for event in eventlist_params[:3]:
+#     print(event)
 
+
+# Seattle as default
+# http://api.eventful.com/json/events/search?keywords=Music&date=None&app_key=v6BJKNJCtjRkbz6d&location=Seattle&page_size=5
+# http://api.eventful.com/json/events/search?keywords=Music&date=None&app_key=v6BJKNJCtjRkbz6d&location=Seattle&page_size=5
+# Seattle passed
